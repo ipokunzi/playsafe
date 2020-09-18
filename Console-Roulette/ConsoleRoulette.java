@@ -60,6 +60,7 @@ public class ConsoleRoulette {
 		        	nameBetAmount.set(i, evaluateBet(nameBetAmount.get(i), rouletteNumber));
 		        	
 		        	nameBetAmountArray = nameBetAmount.get(i).split(" ");
+		        	
 		        	System.out.printf("%1s %10s %10s %10s", nameBetAmountArray[0], nameBetAmountArray[1], nameBetAmountArray[3], nameBetAmountArray[4]);
 		        	System.out.println();
 				}
@@ -71,15 +72,15 @@ public class ConsoleRoulette {
 	}
 	
 	public static String evaluateBet(String nameBetAmount, int rouletteNumber){
-		
-		if(rouletteNumber == 0){
-			return nameBetAmount + " LOSE 0.0";
-		}
-		
+			
 		int bet = 0;
     	double winning = 0.0;
     	String outCome = "";
     	String[] nameBetAmountArray = nameBetAmount.split(" ");
+    	
+    	if(rouletteNumber == 0){
+			return nameBetAmountArray[0] + " " + nameBetAmountArray[1] + " " + nameBetAmountArray[2] + " " + " LOSE 0.0";
+		}
 		
     	if(isInteger(nameBetAmountArray[1])){
     		bet = Integer.parseInt(nameBetAmountArray[1]);
@@ -88,7 +89,8 @@ public class ConsoleRoulette {
 				winning = 36.0*Double.parseDouble(nameBetAmountArray[2]);
 				outCome = "WIN";
 			}else{
-				//do nothing
+				winning = 0.0;
+				outCome = "LOSE";
 			}
     	}else{
     		
@@ -96,25 +98,21 @@ public class ConsoleRoulette {
     			if(nameBetAmountArray[1].equalsIgnoreCase("EVEN")){
             		winning = 2.0*Double.parseDouble(nameBetAmountArray[2]);
             		outCome = "WIN";
-        			System.out.println("EVEN : "+winning);
             	}else{
             		outCome = "LOSE";
-            		System.out.println("Not Even : "+winning);
             	}
     		}else{
     			if(nameBetAmountArray[1].equalsIgnoreCase("ODD")){
             		winning = 2.0*Double.parseDouble(nameBetAmountArray[2]);
         			outCome = "WIN";
-        			System.out.println("Odd : "+winning);
             	}else{
             		outCome = "LOSE";
-            		System.out.println("Not Odd : "+winning);
             	}
     		}
     	
     	}
     	
-    	return nameBetAmount + " " + outCome + " " + winning;
+    	return nameBetAmountArray[0] + " " + nameBetAmountArray[1] + " " + nameBetAmountArray[2] + " " + outCome + " " + winning;
 	}
 	
 	public static ArrayList<String> loadPlayers(){
