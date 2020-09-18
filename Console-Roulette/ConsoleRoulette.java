@@ -28,9 +28,11 @@ public class ConsoleRoulette {
     	String line = in.nextLine();
     	
     	while (!line.equalsIgnoreCase("s")){
-    		//to do validate nameBetAmount
-    		if(!line.isEmpty())
+    		if(isValid(line)){
     			nameBetAmount.add(line);
+    		}else{
+    			System.out.println("Invalid input");
+    		}
     		line = in.nextLine();
     	}
 	    
@@ -143,5 +145,27 @@ public class ConsoleRoulette {
 	        return false;
 	    }
 	    return true;
+	}
+	
+	public static boolean isValid(String s){
+		if(s.isEmpty())
+			return false;
+		
+		String[] nameBetAmountArray = s.split(" ");
+		if(nameBetAmountArray.length != 3)
+			return false;
+		
+		String bet = nameBetAmountArray[1];
+		
+		if(isInteger(bet)){
+			if((Integer.parseInt(bet) >= 1 || Integer.parseInt(bet) <= 36))
+				return true;
+		}else{
+			if(nameBetAmountArray[1].equalsIgnoreCase("EVEN") || nameBetAmountArray[1].equalsIgnoreCase("ODD")){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
