@@ -28,7 +28,7 @@ public class ConsoleRoulette {
     	String line = in.nextLine();
     	
     	while (!line.equalsIgnoreCase("s")){
-    		if(isValid(line)){
+    		if(isValid(line, players)){
     			nameBetAmount.add(line);
     		}else{
     			System.out.println("Invalid input");
@@ -66,7 +66,7 @@ public class ConsoleRoulette {
 		        	System.out.printf("%1s %10s %10s %10s", nameBetAmountArray[0], nameBetAmountArray[1], nameBetAmountArray[3], nameBetAmountArray[4]);
 		        	System.out.println();
 				}
-	            Thread.sleep(5 * 1000);
+	            Thread.sleep(30 * 1000);
 	        }
 	    } catch (InterruptedException e) {
 	        e.printStackTrace();
@@ -84,7 +84,7 @@ public class ConsoleRoulette {
 			return nameBetAmountArray[0] + " " + nameBetAmountArray[1] + " " + nameBetAmountArray[2] + " " + " LOSE 0.0";
 		}
 		
-    	if(isInteger(nameBetAmountArray[1])){
+    	if(isNumeric(nameBetAmountArray[1])){
     		bet = Integer.parseInt(nameBetAmountArray[1]);
 			
     		if (bet == rouletteNumber){
@@ -135,19 +135,31 @@ public class ConsoleRoulette {
 		return playerNames;
 	}
 	
-	public static boolean isInteger(String strNum) {
+	public static boolean isNumeric(String strNum) {
 	    if (strNum == null) {
 	        return false;
 	    }
 	    try {
-	        double i = Integer.parseInt(strNum);
+	        double i = Double.parseDouble(strNum);
 	    } catch (NumberFormatException e) {
 	        return false;
 	    }
 	    return true;
 	}
 	
-	public static boolean isValid(String s){
+	public static boolean isValidBet(String value){
+		boolean result = false;
+		if(isNumeric(value)){
+			if((Integer.parseInt(value) >= 1 || Integer.parseInt(value) <= 36))
+				result = true;
+		}else{
+			if(value.equalsIgnoreCase("EVEN") || value.equalsIgnoreCase("ODD"))
+				result = true;
+		}
+		return result;
+	}
+	
+	public static boolean isValid(String s, ArrayList<String> players){
 		if(s.isEmpty())
 			return false;
 		
@@ -155,17 +167,15 @@ public class ConsoleRoulette {
 		if(nameBetAmountArray.length != 3)
 			return false;
 		
+		String name = nameBetAmountArray[0];
 		String bet = nameBetAmountArray[1];
+		String amount = nameBetAmountArray[2];
 		
-		if(isInteger(bet)){
-			if((Integer.parseInt(bet) >= 1 || Integer.parseInt(bet) <= 36))
-				return true;
-		}else{
-			if(nameBetAmountArray[1].equalsIgnoreCase("EVEN") || nameBetAmountArray[1].equalsIgnoreCase("ODD")){
-				return true;
-			}
-		}
+		boolean result = false;
 		
-		return false;
+		if(players.contains(name) && isValidBet(bet) && isNumeric(amount))
+			result = true;
+		
+		return result;
 	}
 }
