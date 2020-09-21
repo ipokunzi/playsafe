@@ -40,20 +40,23 @@ public class ConsoleRoulette {
 	        while (true) {    	
 		    	if(!nameBetAmount.isEmpty()){
 			    	System.out.println("Bets");
-					System.out.println("---------------------------");
+					System.out.println("-----------------------------------");
 					
 					for(int i = 0; i < nameBetAmount.size(); i++){
 						System.out.println(i+1 + " - " + nameBetAmount.get(i));
 					}
 					
-					System.out.println("---------------------------");
+					System.out.println("-----------------------------------");
 		    	}
-
+		    	
 		        rouletteNumber = rand.nextInt(37);
 		        System.out.println("\nNumber: " + rouletteNumber);
-		        System.out.printf("%1s %10s %10s %10s", "Player", "Bet", "Outcome", "Winnings");
-		        System.out.println();
-		        System.out.println("---");
+//		        
+		        String leftAlignFormat = "%-15s %-15s %-15s %-5s %n";
+
+		        System.out.format("%n");
+		        System.out.format("Player     	 Bet   	     Outcome        Winnings%n");        
+		        System.out.format("---%n");
 		        
 		        String[] nameBetAmountArray = new String[3];
 		        
@@ -61,22 +64,25 @@ public class ConsoleRoulette {
 		        	nameBetAmount.set(i, evaluateBet(nameBetAmount.get(i), rouletteNumber));
 		        	
 		        	nameBetAmountArray = nameBetAmount.get(i).split(" ");
-		        	
-		        	System.out.printf("%1s %10s %10s %10s", nameBetAmountArray[0], nameBetAmountArray[1], nameBetAmountArray[3], nameBetAmountArray[4]);
-		        	System.out.println();
+		        	System.out.format(leftAlignFormat, nameBetAmountArray[0], nameBetAmountArray[1], nameBetAmountArray[3], nameBetAmountArray[4]);
 				}
 		        
+		        System.out.format("---%n");
+		        
 		        String[] player;
-		        System.out.println();
-		        System.out.printf("%1s %10s %10s", "Player", "Total Win", "Total Bet");
-		    	System.out.println("\n---");
+		        leftAlignFormat = "%-15s %-15s %-15s %n";
+
+		        System.out.format("%n");
+		        System.out.format("Player     Total Win   	  Total Bet%n");        
+		        System.out.format("---%n");
 		    	for(int i = 0; i < players.size(); i++){
 		    		
 		    		player = players.get(i).split(",");
 		    		if(player.length == 3)
-		    			System.out.printf("%1s %10s %10s", player[0], player[1], player[2]);
-		    		System.out.println();
+		    			System.out.format(leftAlignFormat, player[0], player[1], player[2]);
 				}
+		    	
+		    	 System.out.format("---%n");
 		    	
 	            Thread.sleep(30 * 1000);
 	        }
