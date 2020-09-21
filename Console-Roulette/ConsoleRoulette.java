@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class ConsoleRoulette {
-	
+	public static ArrayList<String> players;
 	public static void main(String[] args) { 
-		ArrayList<String> players = loadPlayers();
+		players = loadPlayers();
 		
 		System.out.println("Welcome to Console Roulette");
 		System.out.println("Players");
@@ -37,8 +37,7 @@ public class ConsoleRoulette {
     	}
 	    
 	    try {
-	        while (true) {
-	        			    	
+	        while (true) {    	
 		    	if(!nameBetAmount.isEmpty()){
 			    	System.out.println("Bets");
 					System.out.println("---------------------------");
@@ -51,7 +50,7 @@ public class ConsoleRoulette {
 		    	}
 
 		        rouletteNumber = rand.nextInt(37);
-		        System.out.println("Number: " + rouletteNumber);
+		        System.out.println("\nNumber: " + rouletteNumber);
 		        System.out.printf("%1s %10s %10s %10s", "Player", "Bet", "Outcome", "Winnings");
 		        System.out.println();
 		        System.out.println("---");
@@ -66,6 +65,19 @@ public class ConsoleRoulette {
 		        	System.out.printf("%1s %10s %10s %10s", nameBetAmountArray[0], nameBetAmountArray[1], nameBetAmountArray[3], nameBetAmountArray[4]);
 		        	System.out.println();
 				}
+		        
+		        String[] player;
+		        System.out.println();
+		        System.out.printf("%1s %10s %10s", "Player", "Total Win", "Total Bet");
+		    	System.out.println("\n---");
+		    	for(int i = 0; i < players.size(); i++){
+		    		
+		    		player = players.get(i).split(",");
+		    		if(player.length == 3)
+		    			System.out.printf("%1s %10s %10s", player[0], player[1], player[2]);
+		    		System.out.println();
+				}
+		    	
 	            Thread.sleep(30 * 1000);
 	        }
 	    } catch (InterruptedException e) {
@@ -78,6 +90,7 @@ public class ConsoleRoulette {
 		int bet = 0;
     	double winning = 0.0;
     	String outCome = "";
+    	
     	String[] nameBetAmountArray = nameBetAmount.split(" ");
     	
     	if(rouletteNumber == 0){
@@ -86,7 +99,6 @@ public class ConsoleRoulette {
 		
     	if(isNumeric(nameBetAmountArray[1])){
     		bet = Integer.parseInt(nameBetAmountArray[1]);
-			
     		if (bet == rouletteNumber){
 				winning = 36.0*Double.parseDouble(nameBetAmountArray[2]);
 				outCome = "WIN";
@@ -94,6 +106,7 @@ public class ConsoleRoulette {
 				winning = 0.0;
 				outCome = "LOSE";
 			}
+    		
     	}else{
     		
     		if(rouletteNumber % 2 == 0){
@@ -111,9 +124,9 @@ public class ConsoleRoulette {
             		outCome = "LOSE";
             	}
     		}
-    	
+    		
     	}
-    	
+    	tallyBet(nameBetAmountArray[0], winning, Double.parseDouble(nameBetAmountArray[2]));
     	return nameBetAmountArray[0] + " " + nameBetAmountArray[1] + " " + nameBetAmountArray[2] + " " + outCome + " " + winning;
 	}
 	
@@ -177,5 +190,31 @@ public class ConsoleRoulette {
 			result = true;
 		
 		return result;
+	}
+	
+	public static void tallyBet(String name, double winning, double bet){   	
+    	double totalWin = 0.0;
+    	double totalBet = 0.0;
+
+    	String[] player;
+    
+    	for(int i = 0; i < players.size(); i++){
+    		
+    		player = players.get(i).split(",");
+    		
+    		if(name.equals(player[0])){
+    			if(player.length == 3){
+    				//previous winning plus current winning
+        			totalWin = Double.parseDouble(player[1]) + winning;
+        			//previous bet plus current bet
+            		totalBet = Double.parseDouble(player[2]) + bet;
+            		players.set(i, name + "," + totalWin + "," + totalBet);
+        		}else{
+        			//initial results
+        			players.set(i, name + "," + winning + "," + bet);
+        		}
+    			
+    		}
+		}
 	}
 }
